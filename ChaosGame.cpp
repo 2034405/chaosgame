@@ -8,6 +8,9 @@
 #include <sstream>
 #include <vector>
 #include <time.h>
+#include <cstdlib>
+#include <ctime>
+#include <string>
 
 // Make code easier to type with "using namespace"
 using namespace sf;
@@ -36,7 +39,7 @@ int main()
         // Create a video mode object
         VideoMode vm(1920, 1080);
         // Create and open a window for the game
-        RenderWindow window(vm, "Timber Game!!", Style::Default);
+        RenderWindow window(vm, "Chaos Game!!", Style::Default);
 
         sf::Text initial;
         initial.setFont(font);
@@ -69,6 +72,17 @@ int main()
         startProgramRect.top + startProgramRect.height / 2.0f);
         startProgram.setPosition(window.getView().getCenter());
         startProgram.move(0.f, -350.f);
+
+       /* Text Counter;
+        Counter.setFont(font);
+        Counter.setCharacterSize(80);
+        Counter.setString("Now Choose a Fourth...\nWisely...");
+        Counter.setFillColor(Color::Red);
+        sf::FloatRect startCounterrect = Counter.getLocalBounds();
+        startProgram.setOrigin(startCounterrect.left + startCounterrect.width / 2.0f,
+        startCounterrect.top + startCounterrect.height / 2.0f);
+        Counter.setPosition(window.getView().getCenter());
+        Counter.move(0.f, -350.f); */
 
 
         vector<Vector2f> vertices;
@@ -128,10 +142,12 @@ int main()
                     ///select random vertex
                     ///calculate midpoint between random vertex and the last point in the vector
                     ///push back the newly generated coord.
-                    int chooserVar = rand() % 3;
-                    Vector2f spotNew;
-                    spotNew = midpointcalc(vertices[chooserVar], points[points.size() - 1]);
-                    points.push_back(spotNew);
+                    for (int i = 0; i < 125; i++) {
+                        int chooserVar = rand() % 3;
+                        Vector2f spotNew;
+                        spotNew = midpointcalc(vertices[chooserVar], points[points.size() - 1]);
+                        points.push_back(spotNew);
+                    }
                 }
 
                 /*
@@ -150,31 +166,36 @@ int main()
                 }
                 else if (Keyboard::isKeyPressed(Keyboard::N)) { window.close(); }
 
-                auto colorInitial = initial.getFillColor();
-                if (colorInitial == Color::Black) {window.draw(prompt);}
+                if (initial.getFillColor() == Color::Black) {window.draw(prompt);}
 
                 if (vertices.size() >= 3) { prompt.setFillColor(Color::Black);}
 
-                auto colorPrompt = prompt.getFillColor();
-                if (colorPrompt == Color::Black) { window.draw(startProgram);}
+                if (prompt.getFillColor() == Color::Black) { window.draw(startProgram);}
 
                 if (points.size() >  0) { startProgram.setFillColor(Color::Black); }
 
-                    for (int i = 0; i < vertices.size(); i++)
+               // if (startProgram.getFillColor() == Color::Black) {window.draw(Counter);}
+
+                    for (long unsigned int i = 0; i < vertices.size(); i++)
                     {
-                        RectangleShape rect(Vector2f(10, 10));
+                        RectangleShape rect(Vector2f(5, 5));
                         rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
-                        rect.setFillColor(Color::Blue);
+                        rect.setFillColor(Color::Red);
                         window.draw(rect);
                     }
-                    for (int i = 0; i < points.size(); i++) {
-                        RectangleShape rect(Vector2f(10, 10));
+                    for (long unsigned int i = 0; i < points.size(); i++) {
+                        CircleShape rect(2, 8);
                         rect.setPosition(Vector2f(points[i].x, points[i].y));
-                        rect.setFillColor(Color::Blue);
+                        int randcolor = (rand() % 3) + 1;
+                        if (randcolor == 1) {rect.setFillColor(Color::Blue);}
+                        else if (randcolor == 2) {rect.setFillColor(Color::Red);}
+                        else if (randcolor == 3) {rect.setFillColor(Color::Green);}
+                      //  rect.setFillColor(Color::Blue);
                         window.draw(rect);
                     }
-                
-                
+               // Counter.setString(to_string(points.size()));
+               // }
+              
 
                 window.display();
             
